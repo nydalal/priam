@@ -936,7 +936,7 @@ func TestCanUpdateAWSCredentialsInDefaultCredFile(t *testing.T) {
 	cfgFile := filepath.Join(os.Getenv("HOME"), ".aws/credentials")
 	tokenServiceMock := setupTokenServiceMock()
 	tokenServiceMock.On("ExtractUserIDFromIDToken", mock.Anything, goodIdToken).Return("salo")
-	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-hound", expectedAwsStsEndpoint, cfgFile, "priam", "salo").Return(nil)
+	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-hound", expectedAwsStsEndpoint, cfgFile, "priam", "salo", 900).Return(nil)
 	testMockCommand(t, &tokenServiceMock.Mock, "token", "aws", "space-hound")
 }
 
@@ -944,7 +944,7 @@ func TestCanUpdateAWSCredentialsInExplicitCredFile(t *testing.T) {
 	cfgFile := "/var/tmp/my-cred-file"
 	tokenServiceMock := setupTokenServiceMock()
 	tokenServiceMock.On("ExtractUserIDFromIDToken", mock.Anything, goodIdToken).Return("salo")
-	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-messenger", expectedAwsStsEndpoint, cfgFile, "priam", "salo").Return(nil)
+	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-messenger", expectedAwsStsEndpoint, cfgFile, "priam", "salo", 900).Return(nil)
 	testMockCommand(t, &tokenServiceMock.Mock, "token", "aws", "-c", cfgFile, "space-messenger")
 }
 
@@ -952,6 +952,6 @@ func TestCanUpdateAWSCredentialsInExplicitCredFileAndProfile(t *testing.T) {
 	cfgFile := "/var/tmp/my-cred-file"
 	tokenServiceMock := setupTokenServiceMock()
 	tokenServiceMock.On("ExtractUserIDFromIDToken", mock.Anything, goodIdToken).Return("salo")
-	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-hound", expectedAwsStsEndpoint, cfgFile, "kazak", "salo").Return(nil)
+	tokenServiceMock.On("UpdateAWSCredentials", mock.Anything, goodIdToken, "space-hound", expectedAwsStsEndpoint, cfgFile, "kazak", "salo", 900).Return(nil)
 	testMockCommand(t, &tokenServiceMock.Mock, "token", "aws", "-c", cfgFile, "-p", "kazak", "space-hound")
 }

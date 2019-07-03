@@ -621,18 +621,21 @@ func Priam(args []string, defaultCfgFile string, infoW, errorW io.Writer) {
 						cli.StringFlag{Name: "credfile, c", Usage: "name of file to store AWS credentials. Default is ~/" + defaultAwsCredFile},
 						cli.StringFlag{Name: "profile, p", Usage: "Profile in which to store AWS credentials, Default is \"priam'\"."},
 						cli.StringFlag{Name: "id, i", Usage: "Override client id, default is " + cliClientID},
+						cli.StringFlag{Name: "timeout, x", Usage: "token timeout, default is 3600"},
 					},
 					Action: func(c *cli.Context) error {
 						if args, ctx := initCmd(cfg, c, 1, 1, false, nil); ctx != nil {
 							if c.String("id") != "" {
 								updateClientID(c.String("id"))
 							}
+							//timeoutSeconds = strconv.Atoi(timeout)
 							tokenService := tokenServiceFactory.GetTokenService(cfg, cliClientID, cliClientSecret)
 							var userID = tokenService.ExtractUserIDFromIDToken(ctx, cfg.Option(idTokenOption))
 							tokenService.UpdateAWSCredentials(ctx.Log, cfg.Option(idTokenOption),
 								args[0], defaultAwsStsEndpoint,
 								StringOrDefault(c.String("credfile"), filepath.Join(os.Getenv("HOME"), defaultAwsCredFile)),
-								StringOrDefault(c.String("profile"), defaultAwsProfile), userID)
+								StringOrDefault(c.String("profile"), defaultAwsProfile), userID,
+								IntOrDefault(c.String("timeout"), 900))
 						}
 						return nil
 					},
